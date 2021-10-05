@@ -11,3 +11,4 @@ pom.xml.asc
 .hgignore
 .hg/
 service-clojure-race-condition.iml
+.idea
