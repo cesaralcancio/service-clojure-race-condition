@@ -12,3 +12,4 @@ pom.xml.asc
 .hg/
 service-clojure-race-condition.iml
 .idea
+.tmp
