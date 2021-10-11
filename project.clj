@@ -8,5 +8,7 @@
                  [io.pedestal/pedestal.route "0.5.7"]
                  [io.pedestal/pedestal.jetty "0.5.7"]
                  [org.slf4j/slf4j-simple "1.7.28"]
-                 [com.stuartsierra/component "1.0.0"]]
+                 [com.stuartsierra/component "1.0.0"]
+                 [com.datomic/dev-local "0.9.235"]
+                 [cheshire "5.10.0"]]
   :repl-options {:init-ns service-clojure-race-condition.core})

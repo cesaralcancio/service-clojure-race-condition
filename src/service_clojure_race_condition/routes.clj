@@ -1,5 +1,8 @@
 (ns service-clojure-race-condition.routes
-  (:require [io.pedestal.http.route :as route])
+  (:require [io.pedestal.http.route :as route]
+            [service-clojure-race-condition.controllers.transaction :as c.transactions]
+            [cheshire.core :as cheshire]
+            [io.pedestal.http.body-params :as body-params])
   (:import (java.util UUID)))
 
 (defn hello-world [request]
@@ -37,11 +40,18 @@
         store (:store request)]
     (swap! store assoc task-id-uuid task)
     {:status 200 :body {:message "Task updated!"
-                        :task   task}}))
+                        :task    task}}))
+
+(defn post-transactions [request]
+  (let [transaction (:json-params request)
+        datomic (:datomic request)
+        result (c.transactions/process-transaction datomic transaction)]
+    {:status 200 :result result}))
 
 (def routes (route/expand-routes
               #{["/hello" :get hello-world :route-name :hello-world]
                 ["/tasks" :post create-task :route-name :create-task]
                 ["/tasks" :get tasks :route-name :tasks]
                 ["/tasks/:id" :delete remove-task :route-name :remove-task]
-                ["/tasks/:id" :patch update-task :route-name :update-task]}))
+                ["/tasks/:id" :patch update-task :route-name :update-task]
+                ["/transactions" :post [(body-params/body-params) post-transactions] :route-name :post-transactions]}))
