@@ -42,4 +42,4 @@
 (defn list-databases! [client]
   (d/list-databases client {}))
 
-; (delete-database)
+; (delete-database! client-local db-name-movies)

@@ -34,4 +34,4 @@
                    :post
                    "/transactions"
                    :headers {"Content-Type" "application/json"}
-                   :body "{\"description\":\"Iphone 13\",\"amount\":99}")
+                   :body "{\"description\":\"Iphone 14\",\"amount\":999}")

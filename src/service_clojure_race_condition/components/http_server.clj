@@ -38,9 +38,10 @@
                             ::http/join?  false}
           service-map (-> service-map-base
                           (http/default-interceptors)
-                          (update ::http/interceptors conj (i/interceptor db-interceptor)))]
-      (try-to-start! service-map)
-      (assoc this :http-server {:test-request test-request :server server})))
+                          (update ::http/interceptors conj (i/interceptor db-interceptor)))
+          _ (try-to-start! service-map)
+          http-server {:test-request test-request :server server}]
+      (assoc this :http-server http-server)))
   (stop [this]
     (assoc this :test-request nil)))
 

@@ -8,8 +8,8 @@
   (start [this]
     (let [database (d.config/create-database! d.config/client-local)
           conn (d.config/conn! d.config/client-local)
+          _ (d.config/create-schema! conn d.config/transaction-schema)
           datomic {:database database :conn conn}]
-      (d.config/create-schema! conn d.config/transaction-schema)
       (assoc this :datomic datomic)))
 
   (stop [this]
