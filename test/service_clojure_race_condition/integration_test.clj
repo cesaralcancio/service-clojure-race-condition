@@ -26,9 +26,12 @@
 (def task-id (-> (clojure.edn/read-string (:body (test-request :get "/tasks"))) keys first))
 (test-request :patch (str "/tasks/" task-id "?name=FinishClojureStudy&status=done"))
 
+(test/response-for (::http/service-fn @server)
+                   :get
+                   "/transactions")
 
 (test/response-for (::http/service-fn @server)
                    :post
                    "/transactions"
                    :headers {"Content-Type" "application/json"}
-                   :body "{\"description\":\"Iphone\",\"amount\":10}")
+                   :body "{\"description\":\"Iphone 13\",\"amount\":99}")

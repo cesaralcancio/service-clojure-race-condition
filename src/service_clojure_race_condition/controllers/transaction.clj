@@ -4,7 +4,7 @@
             [datomic.client.api :as d])
   (:import (java.util UUID)))
 
-(defn process-transaction
+(defn process!
   [datomic trx]
   (let [transaction (assoc trx :id (UUID/randomUUID))
         conn (:conn datomic)
@@ -14,3 +14,8 @@
       (do (d.transactions/upsert-one! conn transaction)
           {:status 200})
       {:status 400})))
+
+(defn find-all! [datomic]
+  (let [conn (:conn datomic)
+        transactions (d.transactions/find-all! (d/db conn))]
+    {:status 200 :body transactions}))

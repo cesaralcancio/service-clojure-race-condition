@@ -44,9 +44,11 @@
 
 (defn post-transactions [request]
   (let [transaction (:json-params request)
-        datomic (:datomic request)
-        result (c.transactions/process-transaction datomic transaction)]
-    {:status 200 :result result}))
+        datomic (:datomic request)]
+    (c.transactions/process! datomic transaction)))
+
+(defn get-transactions [request]
+  (c.transactions/find-all! (:datomic request)))
 
 (def routes (route/expand-routes
               #{["/hello" :get hello-world :route-name :hello-world]
@@ -54,4 +56,5 @@
                 ["/tasks" :get tasks :route-name :tasks]
                 ["/tasks/:id" :delete remove-task :route-name :remove-task]
                 ["/tasks/:id" :patch update-task :route-name :update-task]
+                ["/transactions" :get get-transactions :route-name :get-transactions]
                 ["/transactions" :post [(body-params/body-params) post-transactions] :route-name :post-transactions]}))
