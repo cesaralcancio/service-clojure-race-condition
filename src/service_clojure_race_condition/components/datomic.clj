@@ -6,8 +6,8 @@
   component/Lifecycle
 
   (start [this]
-    (let [database (d.config/create-database! d.config/client-local)
-          conn (d.config/conn! d.config/client-local)
+    (let [database (d.config/create-database! d.config/client-local d.config/db-name-transactions)
+          conn (d.config/conn! d.config/client-local d.config/db-name-transactions)
           _ (d.config/create-schema! conn d.config/transaction-schema)
           datomic {:database database :conn conn}]
       (assoc this :datomic datomic)))

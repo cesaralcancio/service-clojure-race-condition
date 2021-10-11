@@ -1,12 +1,13 @@
 (ns service-clojure-race-condition.datomic.dev_config
   (:require [datomic.client.api :as d]))
 
-(def db-name-movies "movies")
+(def db-name-transactions "transactions")
 
 ; https://docs.datomic.com/client-api/datomic.client.api.html#var-client
-(def client-local (d/client {:server-type :dev-local
-                       :system            "dev"
-                       :storage-dir       "/Users/cesar.alcancio/personal/datomic/storage"}))
+(def client-local
+  (d/client {:server-type :dev-local
+             :system      "dev"
+             :storage-dir "/Users/cesar.alcancio/personal/datomic/storage"}))
 
 (def transaction-schema
   [{:db/ident       :transaction/id
@@ -19,7 +20,7 @@
     :db/cardinality :db.cardinality/one
     :db/doc         "Transaction description"}
    {:db/ident       :transaction/amount
-    :db/valueType   :db.type/bigint
+    :db/valueType   :db.type/bigdec
     :db/cardinality :db.cardinality/one
     :db/doc         "Transaction amount"}
    {:db/ident       :transaction/created-at
@@ -27,19 +28,20 @@
     :db/cardinality :db.cardinality/one
     :db/doc         "Instant the record is created"}])
 
-(defn create-database! [client]
-  (d/create-database client {:db-name "transactions"}))
+(defn list-databases! [client]
+  (d/list-databases client {}))
+; (list-databases! client-local)
 
-(defn conn! [client]
-  (d/connect client {:db-name "transactions"}))
-
-(defn create-schema! [conn schema]
-  (d/transact conn {:tx-data schema}))
+(defn create-database! [client db-name]
+  (d/create-database client {:db-name db-name}))
+; (create-database! client-local db-name-transactions)
 
 (defn delete-database! [client db-name]
   (d/delete-database client {:db-name db-name}))
+; (delete-database! client-local db-name-transactions)
 
-(defn list-databases! [client]
-  (d/list-databases client {}))
+(defn conn! [client db-name]
+  (d/connect client {:db-name db-name}))
 
-; (delete-database! client-local db-name-movies)
+(defn create-schema! [conn schema]
+  (d/transact conn {:tx-data schema}))

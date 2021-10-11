@@ -1,4 +1,4 @@
-(ns service-clojure-race-condition.components.components
+(ns service-clojure-race-condition.components.system
   (:require [service-clojure-race-condition.components.http-server :as server]
             [com.stuartsierra.component :as component]
             [service-clojure-race-condition.components.database :as database]

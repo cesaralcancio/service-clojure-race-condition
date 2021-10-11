@@ -1,9 +1,9 @@
 (ns service-clojure-race-condition.end-to-end.tasks-it
   (:require [clojure.test :refer :all]
             [com.stuartsierra.component :as component]
-            [service-clojure-race-condition.components.components :as components]))
+            [service-clojure-race-condition.components.system :as system]))
 
-(def component-result (component/start (components/test-environment)))
+(def component-result (component/start (system/test-environment)))
 (def test-request (-> component-result :http-server :http-server :test-request))
 
 (test-request :get "/hello?name=Cesar")
