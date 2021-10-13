@@ -1,6 +1,8 @@
 # service-clojure-race-condition
 
 This Clojure service is to test some race condition problems with Datomic.
+It is configured to use the dev local datomic and datomic pro, but in order to work we need to comment the dependency on the project.clj
+For example, if we are going to ue the dev local datomic we need to comment the pro and vise versa.
 
 ## Usage
 

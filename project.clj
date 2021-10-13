@@ -10,6 +10,7 @@
                  [org.slf4j/slf4j-simple "1.7.28"]
                  [cheshire "5.10.0"]
                  [com.stuartsierra/component "1.0.0"]
+                 ; [com.datomic/dev-local "0.9.235"]
                  [com.datomic/client-pro "0.9.63"]
                  [cheshire "5.10.0"]]
   :repl-options {:init-ns service-clojure-race-condition.core}

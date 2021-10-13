@@ -68,6 +68,7 @@
         "/transactions")
       :body
       (cheshire/parse-string true)))
+(pprint (count transactions))
 (pprint transactions)
 
 ; delete all transactions
