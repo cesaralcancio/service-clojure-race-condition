@@ -3,7 +3,7 @@
             [com.stuartsierra.component :as component]
             [service-clojure-race-condition.components.system :as system]))
 
-(def component-result (component/start (system/test-environment)))
+(def component-result (component/start (system/local-environment)))
 (def test-request (-> component-result :http-server :http-server :test-request))
 
 (test-request :get "/hello?name=Cesar")

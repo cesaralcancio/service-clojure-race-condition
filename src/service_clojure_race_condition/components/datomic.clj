@@ -1,15 +1,17 @@
 (ns service-clojure-race-condition.components.datomic
   (:require [com.stuartsierra.component :as component]
-            [service-clojure-race-condition.datomic.dev_config :as d.config]))
+            [service-clojure-race-condition.datomic.common-config :as common.config]
+            [service-clojure-race-condition.datomic.dev-local-config :as datomic.dev-local]))
 
 (defrecord Datomic []
   component/Lifecycle
 
   (start [this]
-    (let [database (d.config/create-database! d.config/client-local d.config/db-name-transactions)
-          conn (d.config/conn! d.config/client-local d.config/db-name-transactions)
-          _ (d.config/create-schema! conn d.config/transaction-schema)
-          datomic {:database database :conn conn}]
+    (let [client (datomic.dev-local/client! datomic.dev-local/cfg)
+          _ (datomic.dev-local/create-database! client common.config/db-name-transactions)
+          conn (datomic.dev-local/connect! client common.config/db-name-transactions)
+          _ (datomic.dev-local/create-schema! conn common.config/transaction-schema)
+          datomic {:conn conn}]
       (assoc this :datomic datomic)))
 
   (stop [this]

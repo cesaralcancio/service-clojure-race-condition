@@ -2,4 +2,5 @@
 
 (defn exceeded-limit?
   [transactions]
-  false)
+  (let [total (reduce #(+ %1 (:amount %2)) 0 transactions)]
+    (>= total 1000)))

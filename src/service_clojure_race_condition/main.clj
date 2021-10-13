@@ -5,4 +5,4 @@
 
 (defn -main [& args]
   (println "Welcome to my project! These are your args:" args)
-  (component/start (system/test-environment)))
+  (component/start (system/local-environment)))
