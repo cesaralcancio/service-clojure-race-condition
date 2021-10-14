@@ -1,7 +1,7 @@
 (ns service-clojure-race-condition.components.datomic-pro
   (:require [com.stuartsierra.component :as component]
             [service-clojure-race-condition.datomic.common-config :as common.config]
-            [service-clojure-race-condition.datomic.pro-config :as datomic.pro]))
+            [service-clojure-race-condition.datomic.client-pro-config :as datomic.pro]))
 
 (defrecord Datomic []
   component/Lifecycle

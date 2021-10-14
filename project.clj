@@ -12,6 +12,7 @@
                  [com.stuartsierra/component "1.0.0"]
                  ; [com.datomic/dev-local "0.9.235"]
                  [com.datomic/client-pro "0.9.63"]
+                 [com.datomic/datomic-pro "1.0.6316"]
                  [cheshire "5.10.0"]]
   :repl-options {:init-ns service-clojure-race-condition.core}
   :main service-clojure-race-condition.main

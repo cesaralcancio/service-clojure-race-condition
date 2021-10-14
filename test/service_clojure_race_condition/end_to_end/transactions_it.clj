@@ -8,7 +8,9 @@
             [clojure.pprint :as c.pp])
   (:use clojure.pprint))
 
-(def component-result (component/start (system/test-environment)))
+;(def component-result (component/start (system/local-environment)))
+;(def component-result (component/start (system/test-environment)))
+(def component-result (component/start (system/peer-environment)))
 (def server (-> component-result :http-server :http-server :server))
 
 (def all-transactions

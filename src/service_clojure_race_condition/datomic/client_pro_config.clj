@@ -1,4 +1,4 @@
-(ns service-clojure-race-condition.datomic.pro-config
+(ns service-clojure-race-condition.datomic.client-pro-config
   (:use clojure.pprint)
   (:require [datomic.client.api :as d]))
 

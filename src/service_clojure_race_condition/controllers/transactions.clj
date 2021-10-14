@@ -1,5 +1,5 @@
 (ns service-clojure-race-condition.controllers.transactions
-  (:require [service-clojure-race-condition.datomic.transactions :as d.transactions]
+  (:require [service-clojure-race-condition.datomic.peer.peer-transactions :as d.transactions]
             [service-clojure-race-condition.logic.transactions :as l.transactions]
             [cheshire.core :as cheshire])
   (:import (java.util UUID)))
