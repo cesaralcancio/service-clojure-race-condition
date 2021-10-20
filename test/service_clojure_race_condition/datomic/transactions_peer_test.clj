@@ -3,7 +3,8 @@
             [service-clojure-race-condition.datomic.peer.peer-pro-config :as config]
             [service-clojure-race-condition.datomic.peer.peer-transactions :as transactions]
             [service-clojure-race-condition.datomic.common-config :as common])
-  (:import (java.util UUID))
+  (:import (java.util UUID)
+           (java.util.concurrent ExecutionException))
   (:use clojure.pprint))
 
 (config/create-database! config/base-uri config/db-name-transactions)
@@ -25,11 +26,14 @@
 (def transaction-atomic
   {:id          (UUID/randomUUID)
    :description "Iphone 7s"
-   :amount      1})
+   :amount      500})
 
-(transactions/upsert-one-atomic!
-  {:conn conn}
-  transaction-atomic)
+(try
+  @(transactions/upsert-one-isolated!
+     {:conn conn}
+     transaction-atomic)
+  (catch ExecutionException e
+    (println "Error: " e)))
 
 ; list
 (def transactions

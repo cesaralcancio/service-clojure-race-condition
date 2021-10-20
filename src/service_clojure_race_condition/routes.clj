@@ -50,6 +50,11 @@
         datomic (:datomic request)]
     (c.transactions/process! datomic transaction)))
 
+(defn post-transactions-v2 [request]
+  (let [transaction (:json-params request)
+        datomic (:datomic request)]
+    (c.transactions/process-isolated! datomic transaction)))
+
 (defn delete-transactions [request]
   (let [id (get-in request [:path-params :id])
         datomic (:datomic request)]
@@ -64,4 +69,5 @@
       ["/tasks/:id" :patch update-task :route-name :update-task]
       ["/transactions" :get get-transactions :route-name :get-transactions]
       ["/transactions" :post [(body-params/body-params) post-transactions] :route-name :post-transactions]
+      ["/transactions-v2" :post [(body-params/body-params) post-transactions-v2] :route-name :post-transactions-v2]
       ["/transactions/:id" :delete delete-transactions :route-name :delete-transactions]}))

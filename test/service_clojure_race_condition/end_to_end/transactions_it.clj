@@ -25,7 +25,7 @@
 (test/response-for
   (::http/service-fn @server)
   :post
-  "/transactions"
+  "/transactions-v2"
   :headers {"Content-Type" "application/json"}
   :body "{\"description\":\"Iphone 10\",\"amount\":200}")
 
@@ -59,6 +59,18 @@
           (::http/service-fn @server)
           :post
           "/transactions"
+          :headers {"Content-Type" "application/json"}
+          :body "{\"description\":\"Iphone 10\",\"amount\":200}")))))
+
+; insert 100 times race condition but handled by transactor
+(dotimes [i 100]
+  (.start
+    (Thread.
+      (fn []
+        (test/response-for
+          (::http/service-fn @server)
+          :post
+          "/transactions-v2"
           :headers {"Content-Type" "application/json"}
           :body "{\"description\":\"Iphone 10\",\"amount\":200}")))))
 

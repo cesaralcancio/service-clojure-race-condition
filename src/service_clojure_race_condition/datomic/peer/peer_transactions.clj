@@ -3,31 +3,40 @@
             [service-clojure-race-condition.datomic.common-config :as common])
   (:import (java.util Date)))
 
+(defn now
+  [] (new Date))
+
 (def transaction-schema
   (conj
     common/transaction-schema
     {:db/ident :add-transaction
      :db/fn    #db/fn {:lang   :clojure
                        :params [db transaction]
-                       :code   (let [all (d/pull db '[*] "transactions")]
-                                 (if (> (:amount transaction) 0)
+                       :code   (let [all (d/q '[:find ?id ?description ?amount ?created-at
+                                                :keys id description amount created-at
+                                                :where
+                                                [?e :transaction/id ?id]
+                                                [?e :transaction/description ?description]
+                                                [?e :transaction/amount ?amount]
+                                                [?e :transaction/created-at ?created-at]]
+                                              db)
+                                     all-transactions (conj all transaction)
+                                     total (reduce #(+ %1 (:amount %2)) 0 all-transactions)]
+                                 (if (not (>= total 1000))
                                    [{:transaction/id          (:id transaction)
                                      :transaction/description (:description transaction)
                                      :transaction/amount      (:amount transaction)
                                      :transaction/created-at  (:created-at transaction)}]
                                    (datomic.api/cancel {:cognitect.anomalies/category :cognitect.anomalies/incorrect
-                                                        :cognitect.anomalies/message  "Amount should be higher than 0"})))}
-     :db/doc   "Transaction ID"}))
+                                                        :cognitect.anomalies/message  "The total os transactions should be less than 1000"})))}
+     :db/doc   "Add transaction with total validation isolated"}))
 
-(defn upsert-one-atomic!
+(defn upsert-one-isolated!
   [{:keys [conn]} transaction]
   (let [t (-> transaction
               (assoc :amount (bigdec (:amount transaction)))
               (assoc :created-at (now)))]
     (d/transact conn [[:add-transaction t]])))
-
-(defn now
-  [] (new Date))
 
 (defn upsert-one!
   "Update or insert one record"
