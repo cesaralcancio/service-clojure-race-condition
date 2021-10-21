@@ -47,3 +47,17 @@
 (doseq [transaction transactions]
   (transactions/delete!
     {:conn conn} (:id transaction)))
+
+; eventual consistency
+(def transaction-eventual-consistency
+  {:id          (UUID/randomUUID)
+   :description "Iphone 7s"
+   :amount      1000})
+
+(def result
+  @(transactions/upsert-one!
+     {:conn conn}
+     transaction-eventual-consistency))
+(pprint result)
+
+(transactions/find-all-specific-time! (:db-after result))

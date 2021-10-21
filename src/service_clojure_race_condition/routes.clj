@@ -55,6 +55,11 @@
         datomic (:datomic request)]
     (c.transactions/process-isolated! datomic transaction)))
 
+(defn post-transactions-v3 [request]
+  (let [transaction (:json-params request)
+        datomic (:datomic request)]
+    (c.transactions/process-eventual-consistency! datomic transaction)))
+
 (defn delete-transactions [request]
   (let [id (get-in request [:path-params :id])
         datomic (:datomic request)]
@@ -70,4 +75,5 @@
       ["/transactions" :get get-transactions :route-name :get-transactions]
       ["/transactions" :post [(body-params/body-params) post-transactions] :route-name :post-transactions]
       ["/transactions-v2" :post [(body-params/body-params) post-transactions-v2] :route-name :post-transactions-v2]
+      ["/transactions-v3" :post [(body-params/body-params) post-transactions-v3] :route-name :post-transactions-v3]
       ["/transactions/:id" :delete delete-transactions :route-name :delete-transactions]}))

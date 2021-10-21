@@ -59,6 +59,17 @@
          [?e :transaction/created-at ?created-at]]
        (d/db conn)))
 
+(defn find-all-specific-time!
+  [db-specific-time]
+  (d/q '[:find ?id ?description ?amount ?created-at
+         :keys id description amount created-at
+         :where
+         [?e :transaction/id ?id]
+         [?e :transaction/description ?description]
+         [?e :transaction/amount ?amount]
+         [?e :transaction/created-at ?created-at]]
+       db-specific-time))
+
 (defn delete!
   [{:keys [conn]} id]
   (d/transact conn [[:db/retract [:transaction/id id] :transaction/id]

@@ -44,6 +44,19 @@
           (assoc transaction
             :message "It will exceed the limit of transactions amount, which is 1000."))))))
 
+(defn process-eventual-consistency!
+  [datomic trx]
+  (let [transaction (assoc trx :id (UUID/randomUUID))
+        result @(d.transactions/upsert-one! datomic transaction)
+        transactions (d.transactions/find-all-specific-time! (:db-after result))]
+    (if-not (l.transactions/exceeded-limit? transactions)
+      (ok transaction)
+      (do
+        (d.transactions/delete! datomic (:id transaction))
+        (bad-request
+          (assoc transaction
+            :message "It will exceed the limit of transactions amount, which is 1000."))))))
+
 (defn delete!
   [datomic id]
   (let [id-uuid (UUID/fromString id)
